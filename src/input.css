@@ -1,0 +1,7 @@
+/* This file is required by the Tailwind CLI. 
+It includes the base, components, and utilities directives 
+which Tailwind processes to generate the final CSS bundle.
+*/
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
