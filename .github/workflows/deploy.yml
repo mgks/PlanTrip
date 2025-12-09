@@ -1,54 +1,31 @@
-name: Deploy Tailwind App to GitHub Pages
+name: Deploy to GitHub Pages
 
 on:
   push:
-      branches: [main]
+    branches:
+      - main
   workflow_dispatch:
 
-permissions:
-      contents: write
-      pages: write 
-      id-token: write
-
 jobs:
-  build_and_deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # Setup Node.js environment
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20' # Use a stable Node version
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
 
-      # Install dependencies (tailwind, postcss, autoprefixer)
-      - name: Install Dependencies
-        run: npm install
-
-      # Build the production-ready CSS bundle
-      # This step uses the 'build' script defined in package.json
-      - name: Build Tailwind CSS
-        run: npm run build
-        
-      # Configure Tailwind's content paths in the config file
-      - name: Configure Tailwind Content Paths (Critical for build)
+      - name: Copy All Files and Folders to Artifact Directory
         run: |
-          echo "/** @type {import('tailwindcss').Config} */" > tailwind.config.js
-          echo "module.exports = {" >> tailwind.config.js
-          echo "  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}']," >> tailwind.config.js
-          echo "  theme: { extend: {}, }," >> tailwind.config.js
-          echo "  plugins: []," >> tailwind.config.js
-          echo "}" >> tailwind.config.js
+          mkdir -p build
+          rsync -a --exclude 'build' --exclude '.git' --exclude '.github' --exclude 'node_modules' . build/
 
-      # Deploy to GitHub Pages
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        if: github.ref == 'refs/heads/main'
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: . 
-          # Note: Since the CSS output (dist/style.css) is generated in the root directory 
-          # and index.html references it with a relative path, we deploy the root directory.
+          path: './build'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
