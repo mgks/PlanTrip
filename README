@@ -1,0 +1,18 @@
+# PlanTrip: Offline Trip Planner
+
+PlanTrip is a beautiful, minimalist, and functional trip planning application built entirely with HTML, CSS (Tailwind CSS), and JavaScript. It runs fully offline and stores all your itineraries directly in your browser's local storage.
+
+## ✨ Features
+
+- Offline Ready: Uses localStorage for complete offline functionality.
+- Multi-Trip Management: Easily manage and switch between multiple trips using top tabs.
+- Visual Timeline: Events are rendered in an alternating, flowy timeline layout, connecting your journey visually.
+- Rich Entries: Add locations, dates, descriptions, categories (Food, Nature, Sightseeing, etc.), and photos for each stop.
+- PDF Export: Download a clean, printable PDF version of your itinerary.
+- Single File: The entire application is contained within a single index.html file, making it easy to host, share, and review.
+
+## 🚀 Deployment
+
+This project uses GitHub Actions to automatically deploy the index.html file to GitHub Pages whenever a change is pushed to the main branch.
+
+The live application can be accessed at: https://[username].github.io/PlanTrip/

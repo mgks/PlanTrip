@@ -1,0 +1,111 @@
+body {
+    font-family: 'Nunito', sans-serif;
+    background-color: #f8f9fa; 
+}
+
+/* Hide Scrollbar for clean UI */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* Central Timeline Line */
+.journey-line {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 40px;
+    bottom: 0;
+    width: 4px;
+    background-image: linear-gradient(to bottom, #e5e7eb 50%, transparent 50%);
+    background-size: 4px 20px;
+    z-index: 0;
+}
+
+/* Responsive Timeline adjustment for smaller screens */
+@media (max-width: 1024px) {
+        .journey-line {
+        left: 30px; /* Shift line to the left edge */
+        transform: translateX(0);
+        }
+        .timeline-item-wrapper {
+        flex-direction: row !important; /* Force left-to-right alignment */
+        }
+        .timeline-content-area {
+        width: 100% !important; /* Full width for content */
+        padding-left: 2rem !important; /* Space after the line */
+        padding-right: 0 !important;
+        text-align: left !important;
+        }
+        .timeline-content-area-left {
+        width: 0 !important; /* Hide left spacer */
+        }
+        .timeline-dot {
+        left: 30px !important; /* Center dot on the shifted line */
+        transform: translateX(-50%) !important;
+        }
+        .timeline-date-label {
+        text-align: left !important;
+        }
+        .timeline-edit-controls-left {
+        left: 4rem !important; /* Adjust controls position */
+        right: auto !important;
+        }
+}
+
+
+/* PDF Styles - Crucial changes for clean print layout and fixed width */
+@media print {
+    .no-print { display: none !important; }
+    body { background: white; }
+    /* Force a max-width and center for PDF printing */
+    #pdfContent { 
+        margin: 0 auto !important; 
+        max-width: 800px !important; 
+        padding: 30px !important; 
+        box-shadow: none !important;
+    }
+    .journey-line { border-left: 2px dashed #cbd5e1; background: none; }
+    .print-header { display: block !important; }
+
+        /* Reset mobile styles for print (which uses fixed width) */
+        .timeline-content-area {
+        width: 50% !important; 
+        padding-left: 24px !important; 
+        padding-right: 24px !important;
+        text-align: left !important;
+        }
+        .timeline-content-area-left {
+        width: 50% !important; 
+        }
+        .timeline-dot {
+        left: 50% !important; 
+        transform: translateX(-50%) !important;
+        }
+}
+
+/* Custom Input Styles to match */
+.custom-input {
+    appearance: none;
+    background-color: #f3f4f6;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+}
+.custom-input:focus {
+    background-color: #fff;
+    border-color: #000;
+    box-shadow: 0 0 0 4px rgba(229, 231, 235, 0.5);
+}
+
+/* Animations */
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-5px); }
+    100% { transform: translateY(0px); }
+}
+.animate-float {
+    animation: float 4s ease-in-out infinite;
+}

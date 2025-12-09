@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlanTrip - Offline Journey Planner</title>
+    
+    <!-- Canonical URL (Important for SEO, using your custom domain) -->
+    <link rel="canonical" href="https://plantrip.mgks.dev/">
+
+    <!-- Primary SEO Tags -->
+    <meta name="author" content="Ghazi Khan | @mgks">
+    <meta name="description" content="PlanTrip: The ultimate offline-first, browser-based trip planner. Visualize, organize, and manage complex itineraries and travel stops with a clean, visual timeline. Privacy-first, zero-setup planner by Ghazi Khan.">
+    <meta name="keywords" content="trip planner, travel itinerary, offline planner, browser app, itinerary maker, journey organizer, ghazi khan, @mgks, plantrip, html app, single-page planner">
+
+    <!-- Open Graph Tags (for Facebook, LinkedIn, etc.) -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://plantrip.mgks.dev/">
+    <meta property="og:title" content="PlanTrip: Offline Trip Planner by Ghazi Khan">
+    <meta property="og:description" content="Visualize your next adventure! PlanTrip is an elegant, offline-ready, browser-based app for creating detailed, visual travel itineraries. Save your whole trip on your device.">
+    <meta property="og:image" content="[URL_TO_YOUR_PREVIEW_IMAGE_1200x630px]">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card Tags (for Twitter/X) -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@mgks">
+    <meta name="twitter:creator" content="@mgks">
+    <meta name="twitter:url" content="https://plantrip.mgks.dev/">
+    <meta name="twitter:title" content="PlanTrip: Offline Trip Planner">
+    <meta name="twitter:description" content="Organize your journey with PlanTrip, the beautiful and highly functional offline trip planner. Developed by Ghazi Khan (@mgks).">
+    <meta name="twitter:image" content="[URL_TO_YOUR_PREVIEW_IMAGE_FOR_TWITTER]">
+
+    <link rel="stylesheet" href="./dist/style.css">
+    <link rel="stylesheet" href="src/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body class="h-screen flex flex-col overflow-hidden text-gray-800">
+
+    <!-- Top Navigation / Tabs -->
+    <nav class="h-20 bg-white/80 backdrop-blur-md border-b border-gray-100 flex items-center px-4 sm:px-6 z-20 no-print sticky top-0">
+        
+        <!-- Left Side: Utility Actions -->
+        <div class="flex items-center gap-3">
+            <button onclick="openCreditsModal()" class="flex-shrink-0 bg-gray-100 hover:bg-gray-200 text-gray-600 w-10 h-10 rounded-full flex items-center justify-center transition shadow-sm transform hover:scale-105" title="Privacy & Credits">
+                <i class="fas fa-info"></i>
+            </button>
+            <!-- Note: This button is for starting a NEW TRIP/ADVENTURE -->
+            <button onclick="createNewTrip()" class="flex-shrink-0 bg-black hover:bg-gray-800 text-white w-10 h-10 rounded-full flex items-center justify-center transition shadow-lg transform hover:scale-105" title="New Trip">
+                <i class="fas fa-plus"></i>
+            </button>
+        </div>
+
+        <!-- Center: Tabs -->
+        <div class="flex items-center gap-2 overflow-x-auto no-scrollbar flex-1 px-4" id="tripTabs">
+            <!-- Tabs injected here -->
+        </div>
+
+        <!-- Right Side: Export & Sponsor -->
+        <div class="flex items-center gap-3">
+            <a href="https://github.com/sponsors/mgks" target="_blank" class="flex-shrink-0 bg-emerald-500 text-white px-3 sm:px-5 py-2.5 rounded-full font-bold shadow-md hover:bg-emerald-600 transition transform hover:-translate-y-0.5 flex items-center gap-1 sm:gap-2 text-xs sm:text-sm">
+                <i class="fas fa-heart"></i> <span class="hidden sm:inline">Sponsor</span>
+            </a>
+            <button onclick="exportPDF()" class="flex-shrink-0 bg-airbnb-red text-white px-3 sm:px-5 py-2.5 rounded-full font-bold shadow-md hover:shadow-lg transition transform hover:-translate-y-0.5 flex items-center gap-1 sm:gap-2 text-xs sm:text-sm">
+                <i class="fas fa-download"></i> <span class="hidden sm:inline">Download PDF</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Workspace -->
+    <div class="flex-1 flex overflow-hidden relative">
+        
+        <!-- Left Sidebar (Stats/Summary) - Desktop Only -->
+        <aside class="w-80 bg-white border-r border-gray-100 hidden lg:flex flex-col overflow-y-auto no-print z-10 shadow-[4px_0_24px_rgba(0,0,0,0.02)]">
+            <div class="p-8">
+                <div class="mb-8">
+                    <label class="block text-xs font-extrabold text-gray-400 uppercase tracking-wider mb-2">Trip Name</label>
+                    <input type="text" id="tripNameInput" class="w-full text-2xl font-black text-gray-800 border-none focus:ring-0 p-0 bg-transparent placeholder-gray-300" placeholder="Untitled Journey" onkeyup="updateTripMeta()">
+                </div>
+                
+                <div class="mb-8">
+                    <label class="block text-xs font-extrabold text-gray-400 uppercase tracking-wider mb-2">Notes</label>
+                    <textarea id="tripDescInput" rows="4" class="w-full text-base text-gray-600 bg-gray-50 rounded-2xl p-4 border-none focus:ring-2 focus:ring-gray-200 resize-none transition" placeholder="High-level plan or budget notes" onchange="updateTripMeta()"></textarea>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 mb-8" id="sidebarStats">
+                    <div class="bg-blue-50 p-4 rounded-2xl text-center">
+                        <div class="text-blue-400 text-xs font-bold uppercase mb-1">Stops</div>
+                        <div class="text-3xl font-black text-blue-600" id="statStops">0</div>
+                    </div>
+                    <div class="bg-pink-50 p-4 rounded-2xl text-center">
+                        <div class="text-pink-400 text-xs font-bold uppercase mb-1">Duration</div>
+                        <div class="text-xl font-black text-pink-600 mt-1" id="statDuration">-</div>
+                    </div>
+                </div>
+
+                <div class="space-y-3">
+                    <h3 class="text-xs font-extrabold text-gray-400 uppercase tracking-wider mb-2">Quick Actions</h3>
+                    <button onclick="loadTemplate('paris')" class="w-full text-left px-4 py-3 rounded-xl bg-white border border-gray-100 hover:border-pink-200 hover:shadow-md text-sm font-bold text-gray-600 flex items-center gap-3 transition group">
+                        <div class="w-8 h-8 rounded-full bg-pink-100 text-pink-500 flex items-center justify-center group-hover:scale-110 transition"><i class="fas fa-croissant"></i></div>
+                        Paris Template
+                    </button>
+                    <button onclick="loadTemplate('roadtrip')" class="w-full text-left px-4 py-3 rounded-xl bg-white border border-gray-100 hover:border-orange-200 hover:shadow-md text-sm font-bold text-gray-600 flex items-center gap-3 transition group">
+                        <div class="w-8 h-8 rounded-full bg-orange-100 text-orange-500 flex items-center justify-center group-hover:scale-110 transition"><i class="fas fa-car-side"></i></div>
+                        Road Trip Template
+                    </button>
+                    <button onclick="deleteCurrentTrip()" class="w-full text-left px-4 py-3 rounded-xl bg-white border border-gray-100 hover:border-red-200 hover:bg-red-50 text-sm font-bold text-gray-600 flex items-center gap-3 transition group mt-4">
+                        <div class="w-8 h-8 rounded-full bg-red-100 text-red-500 flex items-center justify-center group-hover:scale-110 transition"><i class="fas fa-trash"></i></div>
+                        Delete Trip
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Timeline Area -->
+        <main class="flex-1 overflow-y-auto bg-[#f7f7f7] relative scroll-smooth" id="mainContainer">
+            
+            <!-- PDF Wrapper (Centers content for export) -->
+            <div id="pdfContent" class="min-h-full p-4 lg:p-12 pb-32 max-w-4xl mx-auto bg-[#f7f7f7]">
+                
+                <!-- Mobile Header (Visible on small screens, syncs with desktop sidebar) -->
+                <div class="lg:hidden mb-8 no-print pt-4">
+                    <h1 class="text-4xl font-black text-center text-gray-800 mb-2">PlanTrip</h1>
+                    <input type="text" id="tripNameInputMobile" class="w-full text-xl font-bold text-center bg-transparent border-none focus:ring-0 placeholder-gray-300" placeholder="Trip Name" onkeyup="updateTripMeta()">
+                    <textarea id="tripDescInputMobile" rows="2" class="w-full text-sm text-center text-gray-600 bg-transparent rounded-2xl p-2 border-none focus:ring-2 focus:ring-gray-200 resize-none transition" placeholder="Notes..." onchange="updateTripMeta()"></textarea>
+                </div>
+
+                <!-- PDF Header (Only visible in PDF) -->
+                <div class="print-header hidden mb-8 text-center">
+                    <h1 class="text-4xl font-black text-gray-800 mb-2" id="pdfTitle">Trip Name</h1>
+                    <p class="text-gray-500" id="pdfDesc">Description</p>
+                    <div id="pdfStats" class="flex justify-center gap-6 mt-4">
+                        <!-- Stats injected here before export -->
+                    </div>
+                </div>
+
+                <!-- Empty State -->
+                <div id="emptyState" class="hidden flex flex-col items-center justify-center py-20 text-center">
+                    <div class="w-32 h-32 bg-white rounded-full flex items-center justify-center text-crayon-blue text-5xl mb-6 shadow-xl animate-float">
+                        <i class="fas fa-map-marked-alt"></i>
+                    </div>
+                    <h2 class="text-3xl font-black text-gray-800 mb-3">Let's plan something epic!</h2>
+                    <p class="text-gray-500 max-w-md mb-8 text-lg">Your journey begins with a single step. Tap the plus button to add your first stop.</p>
+                </div>
+
+                <!-- Timeline Container -->
+                <div id="timelineContainer" class="relative">
+                    <!-- Events injected via JS -->
+                </div>
+            </div>
+
+            <!-- Floating Action Button - Mobile/Fallback -->
+            <button onclick="openModal()" class="no-print fixed bottom-8 right-8 bg-black hover:bg-gray-800 text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center text-xl transition transform hover:scale-110 hover:rotate-90 z-30" title="Add New Stop">
+                <i class="fas fa-plus"></i>
+            </button>
+        </main>
+    </div>
+
+    <!-- Modal for Adding/Editing Events -->
+    <div id="eventModal" class="modal fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-gray-900/20 backdrop-blur-sm transition-opacity" onclick="closeModal()"></div>
+        <div class="bg-white w-full max-w-lg rounded-3xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] p-8 relative transform transition-all scale-100 overflow-y-auto max-h-[90vh]">
+            <h3 class="text-2xl font-black text-gray-800 mb-6" id="modalTitle">New Adventure Stop</h3>
+            
+            <form id="eventForm" onsubmit="handleFormSubmit(event)">
+                <input type="hidden" id="eventId">
+                
+                <div class="space-y-5">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Location / Stop Name</label>
+                        <div class="relative">
+                            <span class="absolute left-4 top-3.5 text-gray-400"><i class="fas fa-search-location"></i></span>
+                            <input type="text" id="locationInput" required class="w-full pl-11 pr-4 py-3 rounded-xl custom-input font-bold text-gray-700 outline-none" placeholder="e.g., Hidden Beach, Bali">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Date & Time</label>
+                            <input type="datetime-local" id="dateInput" required class="w-full px-4 py-3 rounded-xl custom-input font-semibold text-gray-600 outline-none text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Category</label>
+                            <div class="relative">
+                                <select id="categoryInput" class="w-full px-4 py-3 rounded-xl custom-input font-semibold text-gray-600 outline-none appearance-none cursor-pointer">
+                                    <option value="sightseeing">📸 Sightseeing</option>
+                                    <option value="food">🍔 Food & Drink</option>
+                                    <option value="transport">✈️ Transport</option>
+                                    <option value="lodging">🛏️ Lodging</option>
+                                    <option value="activity">🧗 Activity</option>
+                                    <option value="shopping">🛍️ Shopping</option>
+                                    <option value="nature">🌲 Nature</option>
+                                    <option value="relax">🧘 Relax</option>
+                                    <option value="entertainment">🎭 Entertainment</option>
+                                </select>
+                                <span class="absolute right-4 top-3.5 text-gray-400 pointer-events-none"><i class="fas fa-chevron-down"></i></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Details</label>
+                        <textarea id="descInput" rows="3" class="w-full px-4 py-3 rounded-xl custom-input text-gray-600 outline-none resize-none" placeholder="Booking numbers, ticket prices, memories..."></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Snap a memory (Optional)</label>
+                        <div class="border-2 border-dashed border-gray-200 rounded-2xl p-6 text-center hover:bg-gray-50 transition cursor-pointer relative group" id="dropZone">
+                            <input type="file" id="photoInput" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" onchange="previewImage(this)">
+                            <div id="imagePreviewContainer" class="hidden relative z-20">
+                                <img id="imgPreview" class="h-40 mx-auto rounded-xl object-contain shadow-sm bg-white">
+                                <button type="button" onclick="clearImage()" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs shadow-md hover:scale-110 transition"><i class="fas fa-times"></i></button>
+                            </div>
+                            <div id="uploadPrompt" class="group-hover:scale-105 transition-transform">
+                                <div class="w-12 h-12 bg-blue-50 text-blue-500 rounded-full flex items-center justify-center mx-auto mb-2 text-xl">
+                                    <i class="fas fa-camera"></i>
+                                </div>
+                                <p class="text-xs text-gray-400 font-bold">Tap to upload photo</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8 flex justify-end gap-3">
+                    <button type="button" onclick="closeModal('eventModal')" class="px-6 py-3 rounded-xl text-gray-500 hover:bg-gray-100 font-bold transition">Cancel</button>
+                    <!-- Primary Save Button - Black for clarity as a main data action -->
+                    <button type="submit" class="px-8 py-3 rounded-xl bg-black text-white font-bold hover:bg-gray-800 shadow-lg hover:shadow-xl transition transform hover:-translate-y-0.5">Save Stop</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Credits/Info Modal -->
+    <div id="creditsModal" class="modal fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-gray-900/20 backdrop-blur-sm transition-opacity" onclick="closeModal('creditsModal')"></div>
+        <div class="bg-white w-full max-w-sm rounded-3xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] p-8 relative transform transition-all scale-100 overflow-y-auto max-h-[90vh] text-center">
+            
+            <i class="fas fa-map-signs text-5xl text-crayon-blue mb-4"></i>
+            <h3 class="text-2xl font-black text-gray-800 mb-3">PlanTrip</h3>
+            <p class="text-sm text-gray-500 mb-6">A privacy-first, zero-setup trip planner.</p>
+            
+            <div class="bg-yellow-50 text-yellow-800 p-4 rounded-xl text-sm mb-6 border border-yellow-200">
+                <i class="fas fa-exclamation-triangle mr-2"></i>
+                <span class="font-bold">Privacy Note:</span> All your trip data is saved directly in your browser's local storage (`localStorage`). If you clear your browser's data, this information will be permanently deleted.
+            </div>
+
+            <div class="mb-8">
+                <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Developed By</h4>
+                <p class="text-lg font-bold text-gray-700">Ghazi Khan</p>
+                <p class="text-sm text-gray-400">GitHub: @mgks</p>
+            </div>
+
+            <div class="flex justify-center gap-4">
+                <a href="https://github.com/mgks/PlanTrip" target="_blank" class="flex items-center gap-2 px-6 py-3 rounded-full bg-black text-white font-bold hover:bg-gray-800 transition transform hover:-translate-y-0.5 shadow-md">
+                    <i class="fab fa-github text-xl"></i>
+                    <span class="text-sm">View on GitHub</span>
+                </a>
+                <!-- Sponsor link is now in the main nav -->
+            </div>
+
+            <button type="button" onclick="closeModal('creditsModal')" class="mt-6 px-6 py-2 rounded-xl text-gray-500 hover:bg-gray-100 font-bold transition text-sm">Close</button>
+        </div>
+    </div>
+
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed top-24 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-6 py-3 rounded-full shadow-2xl transition-all duration-300 opacity-0 -translate-y-10 z-50 flex items-center gap-3 font-bold text-sm">
+        <i class="fas fa-magic text-yellow-400"></i>
+        <span id="toastMessage">Saved!</span>
+    </div>
+
+    <script src="src/js/script.js"></script>
+</body>
+</html>
