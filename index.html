@@ -18,7 +18,7 @@
     <meta property="og:url" content="https://plantrip.mgks.dev/">
     <meta property="og:title" content="PlanTrip: Offline Trip Planner by Ghazi Khan">
     <meta property="og:description" content="Visualize your next adventure! PlanTrip is an elegant, offline-ready, browser-based app for creating detailed, visual travel itineraries. Save your whole trip on your device.">
-    <meta property="og:image" content="[URL_TO_YOUR_PREVIEW_IMAGE_1200x630px]">
+    <meta property="og:image" content="assets/images/preview.png">
     <meta property="og:locale" content="en_US">
 
     <!-- Twitter Card Tags (for Twitter/X) -->
@@ -28,10 +28,10 @@
     <meta name="twitter:url" content="https://plantrip.mgks.dev/">
     <meta name="twitter:title" content="PlanTrip: Offline Trip Planner">
     <meta name="twitter:description" content="Organize your journey with PlanTrip, the beautiful and highly functional offline trip planner. Developed by Ghazi Khan (@mgks).">
-    <meta name="twitter:image" content="[URL_TO_YOUR_PREVIEW_IMAGE_FOR_TWITTER]">
+    <meta name="twitter:image" content="assets/images/preview.png">
 
     <link rel="stylesheet" href="./dist/style.css">
-    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -68,10 +68,10 @@
 
         <!-- Right Side: Export & Sponsor -->
         <div class="flex items-center gap-3">
-            <a href="https://github.com/sponsors/mgks" target="_blank" class="flex-shrink-0 bg-emerald-500 text-white px-3 sm:px-5 py-2.5 rounded-full font-bold shadow-md hover:bg-emerald-600 transition transform hover:-translate-y-0.5 flex items-center gap-1 sm:gap-2 text-xs sm:text-sm">
-                <i class="fas fa-heart"></i> <span class="hidden sm:inline">Sponsor</span>
+            <a href="https://github.com/sponsors/mgks" target="_blank" class="flex-shrink-0 bg-red-500 text-white px-3 sm:px-5 py-2.5 rounded-full font-bold shadow-md hover:bg-rose-600 transition transform hover:-translate-y-0.5 flex items-center gap-1 sm:gap-2 text-xl sm:text-xl" title="Sponsor Project">
+                <i class="fas fa-heart"></i><!--<span class="hidden sm:inline"></span>-->
             </a>
-            <button onclick="exportPDF()" class="flex-shrink-0 bg-airbnb-red text-white px-3 sm:px-5 py-2.5 rounded-full font-bold shadow-md hover:shadow-lg transition transform hover:-translate-y-0.5 flex items-center gap-1 sm:gap-2 text-xs sm:text-sm">
+            <button onclick="exportPDF()" class="flex-shrink-0 bg-emerald-500 text-white px-3 sm:px-5 py-2.5 rounded-full font-bold shadow-md hover:bg-emerald-600 shadow-lg transition transform hover:-translate-y-0.5 flex items-center gap-1 sm:gap-2 text-xs sm:text-sm">
                 <i class="fas fa-download"></i> <span class="hidden sm:inline">Download PDF</span>
             </button>
         </div>
@@ -107,7 +107,7 @@
                 <div class="space-y-3">
                     <h3 class="text-xs font-extrabold text-gray-400 uppercase tracking-wider mb-2">Quick Actions</h3>
                     <button onclick="loadTemplate('paris')" class="w-full text-left px-4 py-3 rounded-xl bg-white border border-gray-100 hover:border-pink-200 hover:shadow-md text-sm font-bold text-gray-600 flex items-center gap-3 transition group">
-                        <div class="w-8 h-8 rounded-full bg-pink-100 text-pink-500 flex items-center justify-center group-hover:scale-110 transition"><i class="fas fa-croissant"></i></div>
+                        <div class="w-8 h-8 rounded-full bg-pink-100 text-pink-500 flex items-center justify-center group-hover:scale-110 transition"><i class="fas fa-shrimp"></i></div>
                         Paris Template
                     </button>
                     <button onclick="loadTemplate('roadtrip')" class="w-full text-left px-4 py-3 rounded-xl bg-white border border-gray-100 hover:border-orange-200 hover:shadow-md text-sm font-bold text-gray-600 flex items-center gap-3 transition group">
@@ -170,7 +170,7 @@
     <div id="eventModal" class="modal fixed inset-0 z-50 hidden flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-gray-900/20 backdrop-blur-sm transition-opacity" onclick="closeModal()"></div>
         <div class="bg-white w-full max-w-lg rounded-3xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] p-8 relative transform transition-all scale-100 overflow-y-auto max-h-[90vh]">
-            <h3 class="text-2xl font-black text-gray-800 mb-6" id="modalTitle">New Adventure Stop</h3>
+            <h3 class="text-2xl font-black text-gray-800 mb-6" id="modalTitle">Add New Stop</h3>
             
             <form id="eventForm" onsubmit="handleFormSubmit(event)">
                 <input type="hidden" id="eventId">
@@ -234,7 +234,7 @@
                 <div class="mt-8 flex justify-end gap-3">
                     <button type="button" onclick="closeModal('eventModal')" class="px-6 py-3 rounded-xl text-gray-500 hover:bg-gray-100 font-bold transition">Cancel</button>
                     <!-- Primary Save Button - Black for clarity as a main data action -->
-                    <button type="submit" class="px-8 py-3 rounded-xl bg-black text-white font-bold hover:bg-gray-800 shadow-lg hover:shadow-xl transition transform hover:-translate-y-0.5">Save Stop</button>
+                    <button type="submit" class="px-8 py-3 rounded-xl bg-black text-white font-bold hover:bg-gray-800 shadow-lg hover:shadow-xl transition transform hover:-translate-y-0.5">Add Stop</button>
                 </div>
             </form>
         </div>
@@ -243,7 +243,7 @@
     <!-- Credits/Info Modal -->
     <div id="creditsModal" class="modal fixed inset-0 z-50 hidden flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-gray-900/20 backdrop-blur-sm transition-opacity" onclick="closeModal('creditsModal')"></div>
-        <div class="bg-white w-full max-w-sm rounded-3xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] p-8 relative transform transition-all scale-100 overflow-y-auto max-h-[90vh] text-center">
+        <div class="bg-white w-full max-w-lg rounded-3xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] p-8 relative transform transition-all scale-100 overflow-y-auto max-h-[90vh] text-center">
             
             <i class="fas fa-map-signs text-5xl text-crayon-blue mb-4"></i>
             <h3 class="text-2xl font-black text-gray-800 mb-3">PlanTrip</h3>
