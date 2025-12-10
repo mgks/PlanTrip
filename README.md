@@ -16,3 +16,19 @@ PlanTrip is a beautiful, minimalist, and functional trip planning application bu
 This project uses GitHub Actions to automatically deploy the index.html file to GitHub Pages whenever a change is pushed to the main branch.
 
 The live application can be accessed at: https://[username].github.io/PlanTrip/
+
+## Contributing
+
+Contributions are always appreciated. If you spot a bug, have an idea for an improvement, or want to add something new, feel free to open a pull request or start a discussion.
+
+## Licence
+
+This project is available under the MIT Licence. See the [LICENSE](LICENSE) file for details or read the [MIT licence](https://opensource.org/licenses/MIT).
+
+## Support
+
+If you find this project helpful, consider supporting the work.
+
+- **Sponsor on GitHub:** https://github.com/sponsors/mgks
+- **Follow:** https://github.com/mgks
+- Star the repo and add it to your watchlist to stay in the loop.
